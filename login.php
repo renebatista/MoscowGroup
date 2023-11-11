@@ -1,3 +1,23 @@
+<?php
+    include("connection.php");
+
+    if(isset($_POST['login'])) {
+        $usuario = $_POST['username'];
+        $senha = base64_decode($_POST['senha']);
+
+        // Query de cadastro de usuario:
+        $queryBusca = "SELECT * FROM Usuarios WHERE Usuario=$usuario AND Senha=$senha";
+
+        // Executando a query:
+        $conectar->query($queryBusca);
+
+        if ($conectar==true) {
+            print "<script>location.href='./index.php';</script>";
+        } else {
+            print "<script>alert('ERRO AO LOGAR USUÁRIO!');</script>";
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,17 +31,21 @@
 <body>
     <header class="flex-row-space-between">
         <img class="logo-img" src="./assets/img/logo.png" alt="">
-        <a class="header-button" href="./register.html">Registrar-se</a>
+        <a class="header-button" href="./register.php">Registrar-se</a>
     </header>
 
     <main class="flex-column-center">
         <h1>Login</h1>
 
-        <form class="flex-column-center width-50" action="">
+        <form class="flex-column-center width-50" action="" method="POST">            
             <input class="default-input" type="text" name="username" id="username" placeholder="Usuário">
-            <input class="default-input" type="text" name="username" id="username" placeholder="Senha">
 
-            <input class="submit-button" type="submit" value="Login">
+            <div class="fake-input flex-row-center">
+                <input type="password" name="senha" id="senha" placeholder="Senha">
+                <img id="view_password" src="./assets/img/view_off.png" alt="Olho bloqueado de vizu senha">
+            </div>
+
+            <input class="submit-button" type="submit" name="login" value="Login">
         </form>
     </main>
 
@@ -55,4 +79,22 @@
         </section>
     </footer>
 </body>
+
+<script>
+        let booleanSenha = 0; // Variável booleana para verificar se a senha está ou não visível
+        let campoSenha = document.getElementById('senha'); // Adiciona o input password à variável
+        let buttonPassword = document.getElementById('view_password'); // Adiciona img que servirá como botão
+        buttonPassword.addEventListener('click', () => {
+            if (booleanSenha == 0) {
+                buttonPassword.src = "./assets/img/view_on.png";
+                campoSenha.type = "text";
+                booleanSenha = 1;
+            } else {
+                buttonPassword.src = "./assets/img/view_off.png";
+                campoSenha.type = "password";
+                booleanSenha = 0;
+            }
+        });
+</script>
+
 </html>

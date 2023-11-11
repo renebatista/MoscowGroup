@@ -65,6 +65,28 @@ main form {
     font-size: 18px;
 }
 
+.fake-input {
+    width: 50%;
+    margin: 10px;
+    padding: 8px;
+    border: 3px solid #000000;
+    border-radius: 10px;
+}
+.fake-input input {
+    border: 0;
+    outline: 0;
+    font-size: 18px;
+    width: 100%;
+}
+.fake-input img {
+    width: 40px;
+    transition: linear transform 0.1s;
+}
+.fake-input img:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
 .submit-button {
     font-size: 18px;
     background-color: #D9D9D9;
