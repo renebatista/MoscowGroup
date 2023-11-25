@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --default-font: 'Rubik', sans-serif;
+}
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;  
+    font-family: var(--default-font);
+}
+
+/* -----===[ ESTILIZAÇÃO DO CABEÇALHO ]===----- */
+
+header {
+    background-color: #E3E3E3;
+    padding: 0 20px;
+}
+
+.logo-img {
+    width: 100px;
+    margin: 10px;
+    transition: linear transform 0.1s;
+}
+
+.logo-img:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+}
+
+.header-button {
+    text-decoration: none;
+    color: #000000;
+    background-color: #FFFFFF;
+    padding: 15px 5PX;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    transition: linear transform 0.1s;
+}
+
+.header-button:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+}
+.profile-infos {
+    padding: 0px 10px;
+    margin: 0px 10px;
+    transition: linear transform 0.2s;
+}
+.profile-infos p {
+    padding: 0 10px;
+    margin: 0;
+}
+.profile-infos img{
+    width: 50px;
+}
+.profile-infos:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+
+/* -----===[ /ESTILIZAÇÃO DO CABEÇALHO ]===----- */
+
+/* -----===[ ESTILIZAÇÃO DA MAIN ]===----- */
+
+/* main {
+    padding: 117px;
+}
+
+main form {
+    margin-top: 50px;
+}
+
+.default-input {
+    width: 50%;
+    margin: 10px;
+    padding: 8px;
+    border: 3px solid #000000;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.fake-input {
+    width: 50%;
+    margin: 10px;
+    padding: 8px;
+    border: 3px solid #000000;
+    border-radius: 10px;
+}
+.fake-input input {
+    border: 0;
+    outline: 0;
+    font-size: 18px;
+    width: 100%;
+}
+.fake-input img {
+    width: 40px;
+    transition: linear transform 0.1s;
+}
+.fake-input img:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.submit-button {
+    margin-top: 50px;
+    font-size: 18px;
+    background-color: #D9D9D9;
+    padding: 15px 30px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    transition: linear transform 0.1s;
+}
+
+.submit-button:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+} */
+
+.metrics-section {
+    border-bottom: 2px solid #000000;
+    flex-wrap: wrap;
+}
+.metrics-section div {
+    margin: 20px;
+}
+.metric {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    margin: 20px;
+    border: 2px solid #000000;
+    border-radius: 20px;
+}
+
+
+section h1 {
+    padding-top: 50px;
+}
+.metrics-graph {
+    width: 100%;
+    margin: 20px;
+}
+.metrics-graph div {
+    width: 95%;
+    padding: 50px;
+    margin: 20px;
+    border: 2px solid #000000;
+    border-radius: 15px;
+}
+.metrics-graph canvas {
+    width: 100%;
+}
+
+/* -----===[ /ESTILIZAÇÃO DA MAIN ]===----- */
+
+/* -----===[ ESTILIZAÇÃO DO RODAPÉ ]===----- */
+
+footer {
+    padding: 50px 50px 10px 50px;
+    background-color: #E3E3E3;
+}
+
+/* LADO ESQUERDO */
+
+.social-media {
+    padding: 0 50px;
+    border-left: 1px solid #000000;
+}
+
+.social-media img {
+    width: 80px;
+}
+
+.links {
+    margin: 20px 0;
+}
+
+.social-media p {
+    margin: 10px 0;
+}
+
+.copy {
+    padding: 20px 0 0 0;
+}
+
+/* LADO DIREITO */
+
+.fut-logo img {
+    width: 220px;
+    opacity: 50%;
+}
+
+.fut-logo p {
+    font-size: 20px;
+    padding-top: 20px;
+}
+
+/* -----===[ /ESTILIZAÇÃO DO RODAPÉ ]===----- */
