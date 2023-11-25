@@ -43,6 +43,23 @@ header {
     cursor: pointer;
     transform: scale(1.03);
 }
+.profile-infos {
+    padding: 0px 10px;
+    margin: 0px 10px;
+    transition: linear transform 0.2s;
+}
+.profile-infos p {
+    padding: 0 10px;
+    margin: 0;
+}
+.profile-infos img{
+    width: 50px;
+}
+.profile-infos:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
 
 /* -----===[ /ESTILIZAÇÃO DO CABEÇALHO ]===----- */
 
@@ -102,29 +119,39 @@ main form {
     transform: scale(1.03);
 } */
 
-.profile-infos {
-    padding: 0px 10px;
-    margin: 0px 10px;
-    border-left: 1px solid #000000;
+.metrics-section {
+    border-bottom: 2px solid #000000;
+    flex-wrap: wrap;
 }
-.profile-infos p {
-    padding: 0 10px;
-    margin: 0;
+.metrics-section div {
+    margin: 20px;
 }
-.profile-infos img{
-    width: 50px;
-}
-
 .metric {
+    width: 100%;
     text-align: center;
-    padding: 50px;
+    padding: 20px;
     margin: 20px;
     border: 2px solid #000000;
     border-radius: 20px;
 }
 
-.metrics-section {
-    border-bottom: 2px solid #000000;
+
+section h1 {
+    padding-top: 50px;
+}
+.metrics-graph {
+    width: 100%;
+    margin: 20px;
+}
+.metrics-graph div {
+    width: 95%;
+    padding: 50px;
+    margin: 20px;
+    border: 2px solid #000000;
+    border-radius: 15px;
+}
+.metrics-graph canvas {
+    width: 100%;
 }
 
 /* -----===[ /ESTILIZAÇÃO DA MAIN ]===----- */
