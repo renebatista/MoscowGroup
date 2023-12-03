@@ -3,16 +3,19 @@
 
     if(isset($_POST['login'])) {
         $usuario = $_POST['username'];
-        $senha = base64_decode($_POST['senha']);
+        $senha = base64_encode($_POST['senha']);
 
         // Query de cadastro de usuario:
-        $queryBusca = "SELECT * FROM Usuarios WHERE Usuario=$usuario AND Senha=$senha";
+        $queryBusca = "SELECT * FROM Usuarios WHERE Usuario='$usuario' AND Senha='$senha'";
 
         // Executando a query:
-        $conectar->query($queryBusca);
+        $exeQuery = $conectar->query($queryBusca);
+        $resSearch = $exeQuery->num_rows;
+        $loadResults = $exeQuery->fetch_object();
+        $usuId = base64_encode($loadResults->id);
 
-        if ($conectar==true) {
-            print "<script>location.href='./index.php';</script>";
+        if ($resSearch != 0) {
+            print "<script>location.href='./index.php?id=$usuId';</script>";
         } else {
             print "<script>alert('ERRO AO LOGAR USUÁRIO!');</script>";
         }
@@ -23,7 +26,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DerickCarvalho/DkStrap@documentacao/DkStrap.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DerickCarvalho/DkStrap@main/DkStrap.css">
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="icon" href="./assets/img/logo.png">
     <title>Página Inicial</title>

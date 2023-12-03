@@ -1,19 +1,54 @@
+<?php
+    date_default_timezone_set('America/Sao_Paulo');
+    include("connection.php");
+
+    $usuId = $_GET['id'];
+    $usuIdDec = base64_decode($usuId);
+    $dataHoraAtual = date('Y-m-d H:i:s');
+
+    // $SqlData = "SELECT DATE_SUB(data_cadastro , INTERVAL 30 DAY) AS data_30_dias_passado FROM Viagens;";
+    // $exeQueryData = $conectar->query($SqlData);
+    // $resQueryData = $exeQueryData->fetch_object();
+    // $dataLimite = $resQueryData->data_30_dias_passado;
+
+    $searchMetricsQuery = "SELECT * FROM Viagens WHERE usu_id = $usuIdDec";
+    $exeQuery = $conectar->query($searchMetricsQuery);
+    $qntResults = $exeQuery->num_rows;
+    //$loadQueryRes = $exeQuery->fetch_object();
+    $gastos = 0;
+    $ganhos = 0;
+    $viagensTotais = 0;
+    $KmMes = 0;
+    $dataKm = [];
+    $contador = 0;
+
+    while ($loadResults = $exeQuery->fetch_object()) {
+        $gastos += $loadResults->gastos;
+        $KmMes += $loadResults->distancia;
+        $ganhos += $loadResults->ganhos;
+        $dataKm[$contador] = $loadResults->distancia;
+        $contador++;
+    }
+
+    $tamanhoVetor = count($dataKm);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DerickCarvalho/DkStrap@documentacao/DkStrap.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DerickCarvalho/DkStrap@main/DkStrap.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/home.css">
     <link rel="icon" href="./assets/img/logo.png">
-    <title>Document</title>
+    <title>Let's Go Trip - Home</title>
 </head>
 <body>
     <header class="flex-row-space-between">
         <img class="logo-img" id="logo" src="./assets/img/logo.png" alt="">
         <div class="flex-row-space-between">
-            <a href="" class="header-button">+Viagem</a>
+            <a href="./addViagem.php?id=<?php print $usuId ?>" class="header-button">+Viagem</a>
             <div class="profile-infos flex-row-space-between">
                 <p>Nome User</p>
                 <img src="https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png" alt="">
@@ -26,24 +61,24 @@
             <div class="flex-column-center">
                 <div class="metric flex-column-center">
                     <h1>Viagens Cadastradas</h1>
-                    <h1><strong>10</strong></h1>
+                    <h1><strong><?php print $qntResults ?></strong></h1>
                 </div>
     
                 <div class="metric flex-column-center">
-                    <h1>Viagens Cadastradas</h1>
-                    <h1><strong>10</strong></h1>
+                    <h1>KM Rodados no Mês</h1>
+                    <h1><strong><?php print "$KmMes KMs" ?></strong></h1>
                 </div>
             </div>
 
             <div class="flex-column-center">
                 <div class="metric flex-column-center">
-                    <h1>Viagens Cadastradas</h1>
-                    <h1><strong>10</strong></h1>
+                    <h1>Gastos</h1>
+                    <h1><strong><?php print "R$ $gastos"; ?></strong></h1>
                 </div>
     
                 <div class="metric flex-column-center">
-                    <h1>Viagens Cadastradas</h1>
-                    <h1><strong>10</strong></h1>
+                    <h1>Ganho Total</h1>
+                    <h1><strong><?php print "R$ $ganhos" ?></strong></h1>
                 </div>
             </div>
         </section>
@@ -97,19 +132,29 @@
     // Funcionalidade HomePage Button
 
         document.getElementById('logo').addEventListener('click', () => {
-            window.location.href = './index.php';
+            window.location.href = './index.php?id=<?php print $usuId ?>';
         });
 
     // Funcionalidade Graficos
     
+        var limiteMeses = <?php print $qntResults ?>;
 
-        var meses = [
-            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
-        ];
+        var meses = [];
+
+        for (let i = 0; i < limiteMeses; i++) {
+            meses[i] = i+1;
+        }   
+
+        var dataKm = [1,2];
         
-        var dataKm = [
-            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
-        ];
+        // Seguir a mesma lógica para gastos
+
+        <?php
+            for ($index = 0; $index < $tamanhoVetor; $index++) {
+                $TempKm = $dataKm[$index];
+                print "dataKm[$index] = $TempKm;";
+            }
+        ?>;
 
         var dataGastos = [
             1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
@@ -136,7 +181,7 @@
                     display: true,
                     title: {
                     display: true,
-                    text: 'Dias'
+                    text: 'Viagens'
                     }
                 },
                 y: {
@@ -171,7 +216,7 @@
                     display: true,
                     title: {
                     display: true,
-                    text: 'Dias'
+                    text: 'Viagens'
                     }
                 },
                 y: {

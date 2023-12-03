@@ -65,39 +65,51 @@ header {
 
 /* -----===[ ESTILIZAÇÃO DA MAIN ]===----- */
 
-.metrics-section {
-    border-bottom: 2px solid #000000;
-    flex-wrap: wrap;
-}
-.metrics-section div {
-    margin: 20px;
-}
-.metric {
-    width: 500px;
-    text-align: center;
-    padding: 20px;
-    margin: 20px;
-    border: 2px solid #000000;
-    border-radius: 20px;
-}
-
-
-section h1 {
-    padding-top: 50px;
-}
-.metrics-graph {
-    margin: 20px;
-    flex-wrap: wrap;
-}
-.metrics-graph div {
-    width: 800px;
-    padding: 50px;
-    margin: 20px;
-    border: 2px solid #000000;
-    border-radius: 15px;
-}
-.metrics-graph canvas {
+.formulario {
     width: 100%;
+    padding: 20px 50px;
+}
+
+.formulario div {
+    width: 100%;
+    padding: 20px;
+}
+
+.formulario div section {
+    width: 100%;
+    padding: 50px;
+}
+
+.formulario div section input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 3px solid #000000;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.money-input {
+    padding: 0;
+}
+
+.money-input p {
+    font-size: 26px;
+    margin: 0 10px 0 0;
+}
+
+.submit-button {
+    margin-top: 50px;
+    font-size: 18px;
+    background-color: #D9D9D9;
+    padding: 15px 30px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    transition: linear transform 0.1s;    
+}
+.submit-button:hover {
+    cursor: pointer;
+    transform: scale(1.03);
 }
 
 /* -----===[ /ESTILIZAÇÃO DA MAIN ]===----- */
