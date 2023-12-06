@@ -13,6 +13,20 @@ use Vtiful\Kernel\Format;
         $StringUserSql = "SELECT * FROM Usuarios WHERE id=$usuIdDec";
         $exeUserSql = $conectar->query($StringUserSql);
         $loadUserInfos = $exeUserSql->fetch_object();
+
+    // Puxar dados das viagems:
+
+        $searchMetricsQuery = "SELECT * FROM Viagens WHERE usu_id = $usuIdDec AND data_cadastro > '$data30Atras'";
+        $exeQuery = $conectar->query($searchMetricsQuery);
+        $qntResults = $exeQuery->num_rows;
+
+        $gastos = 0;
+        $ganhos = 0;
+        $viagensTotais = 0;
+        $KmMes = 0;
+        //$dataKm = [];
+        //$dataGastos = [];
+        $contador = 0;
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +62,7 @@ use Vtiful\Kernel\Format;
                     <tr>
                     <th scope="col">Data</th>
                     <th scope="col">Partida</th>
+                    <th scope="col"></th>
                     <th scope="col">Destino</th>
                     <th scope="col">Distância</th>
                     <th scope="col">Gastos</th>
@@ -56,7 +71,7 @@ use Vtiful\Kernel\Format;
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <!-- <tr>
                         <th scope="row">01/01/2000</th>
                         <td>Mossoró</td>
                         <td>Fortaleza</td>
@@ -69,23 +84,55 @@ use Vtiful\Kernel\Format;
                                 <button type="button" class="btn btn-danger">Excluir</button>
                             </div>
                         </td>
-                    </tr>
+                    </tr> -->
 
-                    <tr>
-                        <th scope="row">01/01/2000</th>
-                        <td>Mossoró</td>
-                        <td>Fortaleza</td>
-                        <td>400 kM</td>
-                        <td>R$ 150,00</td>
-                        <td>R$ 150,00</td>
+                    <?php
+                        while ($loadResults = $exeQuery->fetch_object()) {
+
+                            // Criptografando o ID da viagem:
+                            
+                            $viagemId = base64_encode($loadResults->id);
+
+                            // Fazendo o carregamento e somando as métricas finais:
+
+                            $gastos += $loadResults->gastos;
+                            $KmMes += $loadResults->distancia;
+                            $ganhos += $loadResults->ganhos;
+                            $contador++;
+
+                            // Montando a tabela:
+
+                            print "<tr>";
+                            print "    <th scope=\"row\">$loadResults->data_cadastro</th>";
+                            print "    <td>$loadResults->partida</td>";
+                            print "    <td>-></td>";
+                            print "    <td>$loadResults->destino</td>";
+                            print    "<td>$loadResults->distancia kM</td>";
+                            print    "<td>R$ $loadResults->gastos</td>";
+                            print    "<td>R$ $loadResults->ganhos</td>";
+                            print    "<td>";
+                            print        "<div class=\"flex-row-center btn-group\" role=\"group\" aria-label=\"Basic example\">";
+                            print            "<a href=\"./editViagem.php?viagemid=$viagemId&usuid=$usuId\" class=\"btn btn-primary\">Editar</a>";
+                            print            "<a href=\"./excluirViagem.php?viagemid=$viagemId&usuid=$usuId\" class=\"btn btn-danger\">Excluir</a>";
+                            print        "</div>";
+                            print    "</td>";
+                            print "</tr>";
+                        }
+                    ?>
+
+                     <tr class="table-success">
+                        <th></th>
+                        <td></td>
+                        <td></td>
+                        <td><strong>MÉTRICAS:</strong></td>
+                        <td><strong><?php print $KmMes ?> KM</strong></td>
+                        <td><strong>R$ <?php print $gastos ?></strong></td>
+                        <td><strong>R$ <?php print $ganhos ?></strong></td>
                         <td>
-                            <div class="flex-row-center btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-primary">Editar</button>
-                                <button type="button" class="btn btn-danger">Excluir</button>
-                            </div>
                         </td>
                     </tr>
 
+                    <!--
                     <tr>
                         <th scope="row">01/01/2000</th>
                         <td>Mossoró</td>
@@ -144,7 +191,7 @@ use Vtiful\Kernel\Format;
                                 <button type="button" class="btn btn-danger">Excluir</button>
                             </div>
                         </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
