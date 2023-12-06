@@ -36,13 +36,11 @@ if (isset($_POST['editar'])) {
 // Obtenha as informações do usuário para pré-preencher o formulário
 $StringUserSql = "SELECT * FROM Usuarios WHERE id=$usuIdDec";
 $exeUserSql = $conectar->query($StringUserSql);
-$loadUserInfos = $exeUserSql->fetch_object();
 
-if ($resultado->num_rows > 0) {
-    while ($row = $resultado->fetch_assoc()) {
-        $usuarioAtual = $row['Usuario'];
-        $nomeAtual = $row['Nome'];
-    }
+if ($exeUserSql->num_rows > 0) {
+    $loadUserInfos = $exeUserSql->fetch_object();
+    $usuarioAtual = $loadUserInfos->Usuario;
+    $nomeAtual = $loadUserInfos->Nome;
 }
 ?>
 
