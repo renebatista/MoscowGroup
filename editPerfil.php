@@ -3,8 +3,8 @@ include("connection.php");
 
 session_start(); // Certifique-se de iniciar a sessão
 
-if (isset($_SESSION['id_usuario'])) {
-    $usuIdDec = $_SESSION['id_usuario'];
+if (isset($_SESSION['id'])) {
+    $usuIdDec = $_SESSION['id'];
 } else {
     // Se o ID do usuário não estiver na sessão, redirecione para a página de login ou faça alguma outra lógica.
     header("Location: login.php");
@@ -19,7 +19,7 @@ if (isset($_POST['editar'])) {
     $URL_Perfil = "https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png";
 
     // Obtenha as informações do usuário para verificar a senha atual
-    $querySelect = "SELECT Senha FROM Usuarios WHERE ID_Usuario=$usuIdDec";
+    $querySelect = "SELECT Senha FROM Usuarios WHERE id=$usuIdDec";
     $result = $conectar->query($querySelect);
 
     if ($result->num_rows > 0) {
@@ -41,7 +41,7 @@ if (isset($_POST['editar'])) {
 
                 if ($conectar == true) {
                     print "<script>alert('Perfil atualizado com sucesso!');</script>";
-                    // Redirecionar para a página de perfil após a edição
+                    // Redirecionar 
                     print "<script>location.href='./login.php';</script>";
                 } else {
                     print "<script>alert('ERRO AO ATUALIZAR O PERFIL!');</script>";
