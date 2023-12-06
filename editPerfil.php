@@ -1,10 +1,11 @@
 <?php
 include("connection.php");
 
-// Verifique a lógica de verificação de sessão aqui, se necessário
+
 
 if (isset($_POST['editar'])) {
-    $idUsuario = $_SESSION['id_usuario']; 
+    $usuId = $_GET['id'];
+    $usuIdDec = base64_decode($usuId);
     $usuario = $_POST['username'];
     $senhaPrimaria = $_POST['password'];
     $confirmarSenha = $_POST['confirmPassword'];
@@ -23,7 +24,7 @@ if (isset($_POST['editar'])) {
         if ($conectar == true) {
             print "<script>alert('Perfil atualizado com sucesso!');</script>";
             // Redirecionar para a página de perfil após a edição
-            print "<script>location.href='./index.php';</script>";
+            print "<script>location.href='./login.php';</script>";
         } else {
             print "<script>alert('ERRO AO ATUALIZAR O PERFIL!');</script>";
         }
@@ -33,9 +34,9 @@ if (isset($_POST['editar'])) {
 }
 
 // Obtenha as informações do usuário para pré-preencher o formulário
-$idUsuario = $_SESSION['id_usuario'];
-$querySelect = "SELECT Usuario, Nome FROM Usuarios WHERE ID_Usuario=$idUsuario";
-$resultado = $conectar->query($querySelect);
+$StringUserSql = "SELECT * FROM Usuarios WHERE id=$usuIdDec";
+$exeUserSql = $conectar->query($StringUserSql);
+$loadUserInfos = $exeUserSql->fetch_object();
 
 if ($resultado->num_rows > 0) {
     while ($row = $resultado->fetch_assoc()) {
