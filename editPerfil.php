@@ -1,8 +1,6 @@
 <?php
 include("connection.php");
 
-
-
 if (isset($_POST['editar'])) {
     $usuId = $_GET['id'];
     $usuIdDec = base64_decode($usuId);
@@ -12,35 +10,53 @@ if (isset($_POST['editar'])) {
     $nomeUsuario = $usuario;
     $URL_Perfil = "https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png";
 
-    if ($senhaPrimaria == $confirmarSenha) {
-        $senha = base64_encode($senhaPrimaria);
+    // Obtenha as informações do usuário para verificar a senha atual
+    $querySelect = "SELECT Senha FROM Usuarios WHERE ID_Usuario=$usuIdDec";
+    $result = $conectar->query($querySelect);
 
-        // Query de atualização de usuário:
-        $queryUpdate = "UPDATE Usuarios SET Usuario='$usuario', Nome='$nomeUsuario', URL_Perfil='$URL_Perfil', Senha='$senha' WHERE ID_Usuario=$idUsuario";
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $senhaAtual = $row['Senha'];
 
-        // Executando a query de atualização:
-        $conectar->query($queryUpdate);
+        // Verifique se a senha atual corresponde à senha fornecida
+        if (base64_decode($senhaAtual) == $senhaPrimaria) {
+            // A senha atual corresponde, prossiga com a atualização
 
-        if ($conectar == true) {
-            print "<script>alert('Perfil atualizado com sucesso!');</script>";
-            // Redirecionar para a página de perfil após a edição
-            print "<script>location.href='./login.php';</script>";
+            if ($senhaPrimaria == $confirmarSenha) {
+                $senha = base64_encode($senhaPrimaria);
+
+                // Query de atualização de usuário:
+                $queryUpdate = "UPDATE Usuarios SET Usuario='$usuario', Nome='$nomeUsuario', URL_Perfil='$URL_Perfil', Senha='$senha' WHERE ID_Usuario=$usuIdDec";
+
+                // Executando a query de atualização:
+                $conectar->query($queryUpdate);
+
+                if ($conectar == true) {
+                    print "<script>alert('Perfil atualizado com sucesso!');</script>";
+                    // Redirecionar para a página de perfil após a edição
+                    print "<script>location.href='./login.php';</script>";
+                } else {
+                    print "<script>alert('ERRO AO ATUALIZAR O PERFIL!');</script>";
+                }
+            } else {
+                print "<script>alert('As senhas não correspondem!');</script>";
+            }
         } else {
-            print "<script>alert('ERRO AO ATUALIZAR O PERFIL!');</script>";
+            print "<script>alert('Senha atual incorreta!');</script>";
         }
     } else {
-        print "<script>alert('As senhas não correspondem!');</script>";
+        print "<script>alert('Usuário não encontrado!');</script>";
     }
 }
 
 // Obtenha as informações do usuário para pré-preencher o formulário
-$StringUserSql = "SELECT * FROM Usuarios WHERE id=$usuIdDec";
+$StringUserSql = "SELECT * FROM Usuarios WHERE ID_Usuario=$usuIdDec";
 $exeUserSql = $conectar->query($StringUserSql);
 
 if ($exeUserSql->num_rows > 0) {
     $loadUserInfos = $exeUserSql->fetch_object();
     $usuarioAtual = $loadUserInfos->Usuario;
-    $nomeAtual = $loadUserInfos->Nome;
+    // $nomeAtual = $loadUserInfos->Nome; // Se você precisar do nome, descomente esta linha
 }
 ?>
 
