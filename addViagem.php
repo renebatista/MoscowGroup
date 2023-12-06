@@ -4,28 +4,36 @@
     $usuId = $_GET["id"];
     $usuIdDec = base64_decode($usuId);
 
-    if (isset($_POST["addViagem"])) {
-        $partida = $_POST["partida"];
-        $destino = $_POST["destino"];
-        $distancia = floatval($_POST["distancia"]);
-        $gastos = floatval($_POST["gastos"]);
-        $ganhos = floatval($_POST["ganhos"]);
+    // Puxar dados do usuário:
 
-        $sqlQuery = "INSERT INTO Viagens (usu_id, partida, destino, distancia, gastos, ganhos)
-        VALUES (
-            '$usuIdDec','$partida','$destino',$distancia,$gastos,$ganhos
-        )";
+        $StringUserSql = "SELECT * FROM Usuarios WHERE id=$usuIdDec";
+        $exeUserSql = $conectar->query($StringUserSql);
+        $loadUserInfos = $exeUserSql->fetch_object();
 
-        $conectar->query($sqlQuery);
+    // Adicionar viagem:
 
-        if ($conectar == true) {
-            sleep(1);
-            base64_encode($usuId);
-            print "<script>window.location.href = './index.php?id=$usuId'</script>";
-        } else {
-            print "<script>alert('Erro ao cadastrar essa viagem');</script>";
+        if (isset($_POST["addViagem"])) {
+            $partida = $_POST["partida"];
+            $destino = $_POST["destino"];
+            $distancia = floatval($_POST["distancia"]);
+            $gastos = floatval($_POST["gastos"]);
+            $ganhos = floatval($_POST["ganhos"]);
+
+            $sqlQuery = "INSERT INTO Viagens (usu_id, partida, destino, distancia, gastos, ganhos)
+            VALUES (
+                '$usuIdDec','$partida','$destino',$distancia,$gastos,$ganhos
+            )";
+
+            $conectar->query($sqlQuery);
+
+            if ($conectar == true) {
+                sleep(1);
+                base64_encode($usuId);
+                print "<script>window.location.href = './index.php?id=$usuId'</script>";
+            } else {
+                print "<script>alert('Erro ao cadastrar essa viagem');</script>";
+            }
         }
-    }
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +52,8 @@
         <img class="logo-img" id="logo" src="./assets/img/logo.png" alt="">
         <div class="flex-row-space-between">
             <div class="profile-infos flex-row-space-between">
-                <p>Nome User</p>
-                <img src="https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png" alt="">
+                <p><?php print $loadUserInfos->Nome ?></p>
+                <img src="<?php print $loadUserInfos->URL_Perfil ?>" alt="">
             </div>
         </div>
     </header>
@@ -57,23 +65,33 @@
                     <h3>Dados da trajetória</h3>
                     <input type="text" name="partida" id="partida" placeholder="Partida">
                     <input type="text" name="destino" id="destino" placeholder="Destino">
-                    <input type="number" name="distancia" id="distancia" placeholder="Distância" min="1" step="any">
+                    <div style="padding: 0;" class="flex-row-center">
+                        <input type="number" name="distancia" id="distancia" placeholder="Distancia" min="1" step="any">
+                        <p class="">Km</p>
+                    </div>
                 </section>
     
                 <section class="flex-column-center">
-                    <h3>Dados dos gastos</h3>
+                    <h3>Dados financeiros</h3>
                     <div style="padding: 0;" class="money-input flex-row-center">
                         <p>R$</p>
                         <input type="number" name="gastos" id="gastos" placeholder="Gastos" step="any">
                     </div>
 
-                    <div style="padding: 0;" class="money-input flex-row-center">
-                        <p>R$</p>
-                        <input type="number" name="ganhos" id="ganhos" placeholder="Ganhos" step="any">
-                    </div>
+                    <?php
+                        if ($loadUserInfos->fretista != 0) {
+                            print "<div style=\"padding: 0;\" class=\"money-input flex-row-center\">";
+                            print "    <p>R$</p>";
+                            print "    <input type=\"number\" name=\"ganhos\" id=\"ganhos\" placeholder=\"Ganhos\" step=\"any\">";
+                            print "</div>";
+                        }
+                    ?>
                 </section>
             </div>
-            <input class="submit-button" type="submit" name="addViagem" value="Cadastrar">
+            <div class="flex-row-center">                
+                <a style="color: #000; margin-right: 10px; text-decoration: none;" class="submit-button" href="./index.php?id=<?php print $usuId ?>">Voltar</a>
+                <input class="submit-button" type="submit" name="addViagem" value="Cadastrar">
+            </div>
         </form>
     </main>
 
@@ -109,6 +127,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        document.querySelector('.profile-infos').addEventListener('click', () => {
+            window.location.href = './editPerfil.php?id=<?php print $usuId ?>';
+        });
+
         document.getElementById('logo').addEventListener('click', () => {
             window.location.href = './index.php?id=<?php print $usuId ?>';
         });

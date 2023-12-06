@@ -1,36 +1,49 @@
 <?php
+use Vtiful\Kernel\Format;
     date_default_timezone_set('America/Sao_Paulo');
     include("connection.php");
 
     $usuId = $_GET['id'];
     $usuIdDec = base64_decode($usuId);
     $dataHoraAtual = date('Y-m-d H:i:s');
+    $data30Atras = (new DateTime($dataHoraAtual))->sub(new DateInterval('P30D'))->format('Y-m-d H:i:s');
 
     // $SqlData = "SELECT DATE_SUB(data_cadastro , INTERVAL 30 DAY) AS data_30_dias_passado FROM Viagens;";
     // $exeQueryData = $conectar->query($SqlData);
     // $resQueryData = $exeQueryData->fetch_object();
     // $dataLimite = $resQueryData->data_30_dias_passado;
 
-    $searchMetricsQuery = "SELECT * FROM Viagens WHERE usu_id = $usuIdDec";
-    $exeQuery = $conectar->query($searchMetricsQuery);
-    $qntResults = $exeQuery->num_rows;
-    //$loadQueryRes = $exeQuery->fetch_object();
-    $gastos = 0;
-    $ganhos = 0;
-    $viagensTotais = 0;
-    $KmMes = 0;
-    $dataKm = [];
-    $contador = 0;
+    // Puxar dados do usuário:
+    
+        $StringUserSql = "SELECT * FROM Usuarios WHERE id=$usuIdDec";
+        $exeUserSql = $conectar->query($StringUserSql);
+        $loadUserInfos = $exeUserSql->fetch_object();
 
-    while ($loadResults = $exeQuery->fetch_object()) {
-        $gastos += $loadResults->gastos;
-        $KmMes += $loadResults->distancia;
-        $ganhos += $loadResults->ganhos;
-        $dataKm[$contador] = $loadResults->distancia;
-        $contador++;
-    }
+    // Puxar dados das viagems:
 
-    $tamanhoVetor = count($dataKm);
+        $searchMetricsQuery = "SELECT * FROM Viagens WHERE usu_id = $usuIdDec AND data_cadastro > '$data30Atras'";
+        $exeQuery = $conectar->query($searchMetricsQuery);
+        $qntResults = $exeQuery->num_rows;
+        //$loadQueryRes = $exeQuery->fetch_object();
+        $gastos = 0;
+        $ganhos = 0;
+        $viagensTotais = 0;
+        $KmMes = 0;
+        $dataKm = [];
+        $dataGastos = [];
+        $contador = 0;
+
+        while ($loadResults = $exeQuery->fetch_object()) {
+            $gastos += $loadResults->gastos;
+            $KmMes += $loadResults->distancia;
+            $ganhos += $loadResults->ganhos;
+            $dataKm[$contador] = $loadResults->distancia;
+            $dataGastos[$contador] = $loadResults->gastos;
+            $contador++;
+        }
+
+        $arrayKmLength = count($dataKm);
+        $arrayGastosLength = count($dataGastos);
 ?>
 
 <!DOCTYPE html>
@@ -50,8 +63,8 @@
         <div class="flex-row-space-between">
             <a href="./addViagem.php?id=<?php print $usuId ?>" class="header-button">+Viagem</a>
             <div class="profile-infos flex-row-space-between">
-                <p>Nome User</p>
-                <img src="https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png" alt="">
+                <p><?php print $loadUserInfos->Nome ?></p>
+                <img src="<?php print $loadUserInfos->URL_Perfil ?>" alt="">
             </div>
         </div>
     </header>
@@ -60,7 +73,7 @@
         <section class="metrics-section flex-row-center">
             <div class="flex-column-center">
                 <div class="metric flex-column-center">
-                    <h1>Viagens Cadastradas</h1>
+                    <h1>Viagens do Mês</h1>
                     <h1><strong><?php print $qntResults ?></strong></h1>
                 </div>
     
@@ -72,14 +85,18 @@
 
             <div class="flex-column-center">
                 <div class="metric flex-column-center">
-                    <h1>Gastos</h1>
+                    <h1>Gastos Totais</h1>
                     <h1><strong><?php print "R$ $gastos"; ?></strong></h1>
                 </div>
     
-                <div class="metric flex-column-center">
-                    <h1>Ganho Total</h1>
-                    <h1><strong><?php print "R$ $ganhos" ?></strong></h1>
-                </div>
+                <?php
+                    if ($loadUserInfos->fretista != 0) {
+                        print "<div class=\"metric flex-column-center\">";
+                        print "    <h1>Ganho Total</h1>";
+                        print "    <h1><strong><?php print \"R$ $ganhos\" ?></strong></h1>";
+                        print "</div>";
+                    }
+                ?>
             </div>
         </section>
 
@@ -131,8 +148,21 @@
     <script> 
     // Funcionalidade HomePage Button
 
-        document.getElementById('logo').addEventListener('click', () => {
-            window.location.href = './index.php?id=<?php print $usuId ?>';
+        var elements = document.getElementById('logo');
+
+    // Funcionalidade das divs de metricas
+
+        var elements = document.querySelectorAll('.metric');
+        elements.forEach(function(element){
+            element.addEventListener('click', () => {
+            window.location.href = './listaViagens.php?id=<?php print $usuId ?>';
+            })        
+        });
+
+    // Funcionalidade redirecionamento para editar perfil
+    
+    document.querySelector('.profile-infos').addEventListener('click', () => {
+            window.location.href = './editPerfil.php?id=<?php print $usuId ?>';
         });
 
     // Funcionalidade Graficos
@@ -145,20 +175,16 @@
             meses[i] = i+1;
         }   
 
-        var dataKm = [1,2];
+        var dataKm = [];
         
         // Seguir a mesma lógica para gastos
 
         <?php
-            for ($index = 0; $index < $tamanhoVetor; $index++) {
+            for ($index = 0; $index < $arrayKmLength; $index++) {
                 $TempKm = $dataKm[$index];
                 print "dataKm[$index] = $TempKm;";
             }
         ?>;
-
-        var dataGastos = [
-            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
-        ];
 
         // KM RODADO
 
@@ -170,9 +196,9 @@
                 datasets: [{
                 label: 'KMs Rodados',
                 data: dataKm,
-                borderColor: 'blue',
-                backgroundColor: 'rgba(0, 0, 255, 0.2)',
-                borderWidth: 5
+                borderColor: '#52dcff',
+                backgroundColor: '#0000FF',
+                borderWidth: 8
                 }]
             },
             options: {
@@ -196,6 +222,19 @@
         });
 
         // GASTOS
+        
+        // Seguir a mesma lógica para gastos
+
+        var dataGastos = [];
+
+        <?php
+            for ($index = 0; $index < $arrayGastosLength; $index++) {
+                $TempGastos = $dataGastos[$index];
+                print "dataGastos[$index] = $TempGastos;";
+            }
+        ?>;
+
+        
 
         var graphic2 = document.getElementById('Gastos').getContext('2d');
         var myGraphic2 = new Chart(graphic2, {
@@ -203,11 +242,11 @@
             data: {
                 labels: meses,
                 datasets: [{
-                label: 'Gastos',
+                label: 'Valor Gasto',
                 data: dataGastos,
-                borderColor: 'blue',
-                backgroundColor: 'rgba(0, 0, 255, 0.2)',
-                borderWidth: 5
+                borderColor: '#81ff7d',
+                backgroundColor: '#048500',
+                borderWidth: 8
                 }]
             },
             options: {
@@ -223,7 +262,7 @@
                     display: true,
                     title: {
                     display: true,
-                    text: 'KM Rodado'
+                    text: 'Valor Gasto'
                     }
                 }
                 }
