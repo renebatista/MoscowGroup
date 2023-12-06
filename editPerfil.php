@@ -1,9 +1,17 @@
 <?php
 include("connection.php");
 
+session_start(); // Certifique-se de iniciar a sessão
+
+if (isset($_SESSION['id_usuario'])) {
+    $usuIdDec = $_SESSION['id_usuario'];
+} else {
+    // Se o ID do usuário não estiver na sessão, redirecione para a página de login ou faça alguma outra lógica.
+    header("Location: login.php");
+    exit();
+}
+
 if (isset($_POST['editar'])) {
-    $usuId = $_GET['id'];
-    $usuIdDec = base64_decode($usuId);
     $usuario = $_POST['username'];
     $senhaPrimaria = $_POST['password'];
     $confirmarSenha = $_POST['confirmPassword'];
