@@ -34,7 +34,7 @@ if (isset($_POST['editar'])) {
                 $senha = base64_encode($senhaPrimaria);
 
                 // Query de atualização de usuário:
-                $queryUpdate = "UPDATE Usuarios SET Usuario='$usuario', Nome='$nomeUsuario', URL_Perfil='$URL_Perfil', Senha='$senha' WHERE ID_Usuario=$usuIdDec";
+                $queryUpdate = "UPDATE Usuarios SET Usuario='$usuario', Nome='$nomeUsuario', URL_Perfil='$URL_Perfil', Senha='$senha' WHERE id=$usuIdDec";
 
                 // Executando a query de atualização:
                 $conectar->query($queryUpdate);
@@ -58,7 +58,7 @@ if (isset($_POST['editar'])) {
 }
 
 // Obtenha as informações do usuário para pré-preencher o formulário
-$StringUserSql = "SELECT * FROM Usuarios WHERE ID_Usuario=$usuIdDec";
+$StringUserSql = "SELECT * FROM Usuarios WHERE id=$usuIdDec";
 $exeUserSql = $conectar->query($StringUserSql);
 
 if ($exeUserSql->num_rows > 0) {
