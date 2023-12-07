@@ -1,24 +1,19 @@
 <?php
 include("connection.php");
+$usuId = $_GET['id'];
+$usuIdDec = base64_decode($usuId);
 
-session_start(); // Certifique-se de iniciar a sessão
-
-if (isset($_SESSION['id'])) {
-    $usuIdDec = $_SESSION['id'];
-} else {
-    // Se o ID do usuário não estiver na sessão, redirecione para a página de login ou faça alguma outra lógica.
-    header("Location: login.php");
-    exit();
-}
+session_start(); 
 
 if (isset($_POST['editar'])) {
     $usuario = $_POST['username'];
-    $senhaPrimaria = $_POST['password'];
+    $senhaPrimaria = $_POST['currentPassword']; 
+    $novaSenha = $_POST['password'];
     $confirmarSenha = $_POST['confirmPassword'];
     $nomeUsuario = $usuario;
     $URL_Perfil = "https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png";
 
-    // Obtenha as informações do usuário para verificar a senha atual
+    // Informações do usuário
     $querySelect = "SELECT Senha FROM Usuarios WHERE id=$usuIdDec";
     $result = $conectar->query($querySelect);
 
@@ -26,12 +21,12 @@ if (isset($_POST['editar'])) {
         $row = $result->fetch_assoc();
         $senhaAtual = $row['Senha'];
 
-        // Verifique se a senha atual corresponde à senha fornecida
+        //Senha atual corresponde s senha fornecida
         if (base64_decode($senhaAtual) == $senhaPrimaria) {
-            // A senha atual corresponde, prossiga com a atualização
+            //Senha atual corresponde:
 
-            if ($senhaPrimaria == $confirmarSenha) {
-                $senha = base64_encode($senhaPrimaria);
+            if ($novaSenha == $confirmarSenha) {
+                $senha = base64_encode($novaSenha);
 
                 // Query de atualização de usuário:
                 $queryUpdate = "UPDATE Usuarios SET Usuario='$usuario', Nome='$nomeUsuario', URL_Perfil='$URL_Perfil', Senha='$senha' WHERE id=$usuIdDec";
@@ -41,13 +36,13 @@ if (isset($_POST['editar'])) {
 
                 if ($conectar == true) {
                     print "<script>alert('Perfil atualizado com sucesso!');</script>";
-                    // Redirecionar 
+                    // Redirecionar para a página de perfil após a edição
                     print "<script>location.href='./login.php';</script>";
                 } else {
                     print "<script>alert('ERRO AO ATUALIZAR O PERFIL!');</script>";
                 }
             } else {
-                print "<script>alert('As senhas não correspondem!');</script>";
+                print "<script>alert('As novas senhas não correspondem!');</script>";
             }
         } else {
             print "<script>alert('Senha atual incorreta!');</script>";
@@ -64,7 +59,7 @@ $exeUserSql = $conectar->query($StringUserSql);
 if ($exeUserSql->num_rows > 0) {
     $loadUserInfos = $exeUserSql->fetch_object();
     $usuarioAtual = $loadUserInfos->Usuario;
-    // $nomeAtual = $loadUserInfos->Nome; // Se você precisar do nome, descomente esta linha
+    // $nomeAtual = $loadUserInfos->Nome; // 
 }
 ?>
 
@@ -92,16 +87,21 @@ if ($exeUserSql->num_rows > 0) {
             <input class="default-input" type="text" name="username" id="username" placeholder="Usuário" value="<?php echo $usuarioAtual; ?>">
 
             <div class="fake-input flex-row-center">
+                <input type="password" name="currentPassword" id="currentPassword" placeholder="Senha Atual">
+                <!--<img id="view_currentPassword" src="./assets/img/view_off.png" alt="Olho bloqueado de vizu senha">-->
+            </div>
+
+            <div class="fake-input flex-row-center">
                 <input type="password" name="password" id="password" placeholder="Nova Senha">
-                <img id="view_password" src="./assets/img/view_off.png" alt="Olho bloqueado de vizu senha">
+                <!--<img id="view_currentPassword" src="./assets/img/view_off.png" alt="Olho bloqueado de vizu senha">-->
             </div>
 
             <div class="fake-input flex-row-center">
                 <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirmar Nova Senha">
-                <img id="view_confirmPassword" src="./assets/img/view_off.png" alt="Olho desbloqueado de vizu senha">
+                <!--<img id="view_currentPassword" src="./assets/img/view_off.png" alt="Olho bloqueado de vizu senha">-->
             </div>
 
-            <input class="submit-button" type="submit" name="editar" value="Editar Perfil">
+            <input class="submit-button" type="submit" name="editar" value="Salvar Alterações">
         </form>
     </main>
 
@@ -110,8 +110,35 @@ if ($exeUserSql->num_rows > 0) {
     </footer>
 
     <script>
-        // 
-    </script>
-</body>
+        let booleanSenha = 0; // Variável booleana para verificar se a senha está ou não visível
+        let campoSenha = document.getElementById('password'); // Adiciona o input password à variável
+        let buttonPassword = document.getElementById('view_password'); // Adiciona img que servirá como botão
+        buttonPassword.addEventListener('click', () => {
+            if (booleanSenha == 0) {
+                buttonPassword.src = "./assets/img/view_on.png";
+                campoSenha.type = "text";
+                booleanSenha = 1;
+            } else {
+                buttonPassword.src = "./assets/img/view_off.png";
+                campoSenha.type = "password";
+                booleanSenha = 0;
+            }
+        });
 
-</html>
+        let booleanConfirmSenha = 0; // Variável booleana para verificar se a senha está ou não visível
+        let campoConfirmSenha = document.getElementById('confirmPassword'); // Adiciona o input password à variável
+        let buttonConfirmPassword = document.getElementById('view_confirmPassword'); // Adiciona img que servirá como botão
+        buttonConfirmPassword.addEventListener('click', () => {
+            if (booleanConfirmSenha == 0) {
+                buttonConfirmPassword.src = "./assets/img/view_on.png";
+                campoConfirmSenha.type = "text";
+                booleanConfirmSenha = 1;
+            } else {
+                buttonConfirmPassword.src = "./assets/img/view_off.png";
+                campoConfirmSenha.type = "password";
+                booleanConfirmSenha = 0;
+            }
+        });
+
+        let booleanCurrentSenha = 0; // Variável booleana para verificar se a senha está ou não visível
+        let campoCurrentSenha = document.getElementById('currentPassword'); // Adicion
