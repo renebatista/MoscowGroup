@@ -6,7 +6,9 @@ use Vtiful\Kernel\Format;
     $usuId = $_GET['id'];
     $usuIdDec = base64_decode($usuId);
     $dataHoraAtual = date('Y-m-d H:i:s');
+    $dataApenas = date('d/m/Y');
     $data30Atras = (new DateTime($dataHoraAtual))->sub(new DateInterval('P30D'))->format('Y-m-d H:i:s');
+    $apenasData30Atras = (new DateTime($dataHoraAtual))->sub(new DateInterval('P30D'))->format('d/m/Y');
 
     // Puxar dados do usuário:
     
@@ -16,7 +18,7 @@ use Vtiful\Kernel\Format;
 
     // Puxar dados das viagems:
 
-        $searchMetricsQuery = "SELECT * FROM Viagens WHERE usu_id = $usuIdDec AND data_cadastro > '$data30Atras'";
+        $searchMetricsQuery = "SELECT * FROM Viagens WHERE usu_id = $usuIdDec AND data_cadastro > '$data30Atras' ORDER BY data_cadastro DESC";
         $exeQuery = $conectar->query($searchMetricsQuery);
         $qntResults = $exeQuery->num_rows;
 
@@ -55,7 +57,7 @@ use Vtiful\Kernel\Format;
     <main class="flex-column-center">
         <div class="tabela flex-column-center">
 
-            <h1>Mostrando viagens de 01/01/2000 - 01/02/2000</h1>
+            <h1>Mostrando viagens de <?php print $apenasData30Atras ?> - <?php print $dataApenas ?></h1>
 
             <table class="table table-striped">
                 <thead>
@@ -63,10 +65,14 @@ use Vtiful\Kernel\Format;
                     <th scope="col">Data</th>
                     <th scope="col">Partida</th>
                     <th scope="col"></th>
-                    <th scope="col">Destino</th>
+                    <th scope="col">Destino</th>                    
                     <th scope="col">Distância</th>
                     <th scope="col">Gastos</th>
-                    <th scope="col">Ganhos</th>
+                    <?php
+                        if ($loadUserInfos->fretista == 0) {
+                            print "<th scope=\"col\">Ganhos</th>";
+                        }
+                    ?>
                     <th style="text-align: center;" scope="col">Ações</th>
                     </tr>
                 </thead>
@@ -87,36 +93,61 @@ use Vtiful\Kernel\Format;
                     </tr> -->
 
                     <?php
-                        while ($loadResults = $exeQuery->fetch_object()) {
+                        if ($exeQuery->num_rows != 0) {
+                            while ($loadResults = $exeQuery->fetch_object()) {
 
-                            // Criptografando o ID da viagem:
-                            
-                            $viagemId = base64_encode($loadResults->id);
+                                // Criptografando o ID da viagem:
+                                
+                                $viagemId = base64_encode($loadResults->id);
+    
+                                // Fazendo o carregamento e somando as métricas finais:
+    
+                                $gastos += $loadResults->gastos;
+                                $KmMes += $loadResults->distancia;
+                                $ganhos += $loadResults->ganhos;
+                                $contador++;
 
-                            // Fazendo o carregamento e somando as métricas finais:
+                                // Convertendo data e hora:
 
-                            $gastos += $loadResults->gastos;
-                            $KmMes += $loadResults->distancia;
-                            $ganhos += $loadResults->ganhos;
-                            $contador++;
-
-                            // Montando a tabela:
-
-                            print "<tr>";
-                            print "    <th scope=\"row\">$loadResults->data_cadastro</th>";
-                            print "    <td>$loadResults->partida</td>";
-                            print "    <td>-></td>";
-                            print "    <td>$loadResults->destino</td>";
-                            print    "<td>$loadResults->distancia kM</td>";
-                            print    "<td>R$ $loadResults->gastos</td>";
-                            print    "<td>R$ $loadResults->ganhos</td>";
-                            print    "<td>";
-                            print        "<div class=\"flex-row-center btn-group\" role=\"group\" aria-label=\"Basic example\">";
-                            print            "<a href=\"./editViagem.php?viagemid=$viagemId&usuid=$usuId\" class=\"btn btn-primary\">Editar</a>";
-                            print            "<a href=\"./excluirViagem.php?viagemid=$viagemId&usuid=$usuId\" class=\"btn btn-danger\">Excluir</a>";
-                            print        "</div>";
-                            print    "</td>";
-                            print "</tr>";
+                                $dataFormatada =  date('d/m/Y - H:i:s', strtotime($loadResults->data_cadastro) - (3 * 60 * 60));
+    
+                                // Montando a tabela:
+    
+                                if ($loadUserInfos->fretista == 0) {
+                                    print "<tr>";
+                                    print "    <th scope=\"row\">$dataFormatada</th>";
+                                    print "    <td>$loadResults->partida</td>";
+                                    print "    <td>-></td>";
+                                    print "    <td>$loadResults->destino</td>";
+                                    print    "<td>$loadResults->distancia kM</td>";
+                                    print    "<td>R$ $loadResults->gastos</td>";
+                                    print    "<td>";
+                                    print        "<div class=\"flex-row-center btn-group\" role=\"group\" aria-label=\"Basic example\">";
+                                    print            "<a href=\"./editViagem.php?viagemid=$viagemId&usuid=$usuId\" class=\"btn btn-primary\">Editar</a>";
+                                    print            "<button type=\"button\" onclick=\"remove('$viagemId', '$usuId')\" class=\"btn btn-danger\">Excluir</button>";
+                                    print        "</div>";
+                                    print    "</td>";
+                                    print "</tr>";
+                                } else {
+                                    print "<tr>";
+                                    print "    <th scope=\"row\">$dataFormatada</th>";
+                                    print "    <td>$loadResults->partida</td>";
+                                    print "    <td>-></td>";
+                                    print "    <td>$loadResults->destino</td>";
+                                    print    "<td>$loadResults->distancia kM</td>";
+                                    print    "<td>R$ $loadResults->gastos</td>";
+                                    print    "<td>R$ $loadResults->ganhos</td>";
+                                    print    "<td>";
+                                    print        "<div class=\"flex-row-center btn-group\" role=\"group\" aria-label=\"Basic example\">";
+                                    print            "<a href=\"./editViagem.php?viagemid=$viagemId&usuid=$usuId\" class=\"btn btn-primary\">Editar</a>";
+                                    print            "<button type=\"button\" onclick=\"remove('$viagemId', '$usuId')\" class=\"btn btn-danger\">Excluir</button>";
+                                    print        "</div>";
+                                    print    "</td>";
+                                    print "</tr>";
+                                }
+                            }
+                        } else {
+                            print "<h1>Você ainda não adicionou viagens!</h1>";
                         }
                     ?>
 
@@ -127,71 +158,14 @@ use Vtiful\Kernel\Format;
                         <td><strong>MÉTRICAS:</strong></td>
                         <td><strong><?php print $KmMes ?> KM</strong></td>
                         <td><strong>R$ <?php print $gastos ?></strong></td>
-                        <td><strong>R$ <?php print $ganhos ?></strong></td>
+                        <?php
+                            if ($loadUserInfos->fretista != 0) {
+                                print "<td><strong>R$ <?php print $ganhos ?></strong></td>";
+                            }
+                        ?>                        
                         <td>
                         </td>
                     </tr>
-
-                    <!--
-                    <tr>
-                        <th scope="row">01/01/2000</th>
-                        <td>Mossoró</td>
-                        <td>Fortaleza</td>
-                        <td>400 kM</td>
-                        <td>R$ 150,00</td>
-                        <td>R$ 150,00</td>
-                        <td>
-                            <div class="flex-row-center btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-primary">Editar</button>
-                                <button type="button" class="btn btn-danger">Excluir</button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">01/01/2000</th>
-                        <td>Mossoró</td>
-                        <td>Fortaleza</td>
-                        <td>400 kM</td>
-                        <td>R$ 150,00</td>
-                        <td>R$ 150,00</td>
-                        <td>
-                            <div class="flex-row-center btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-primary">Editar</button>
-                                <button type="button" class="btn btn-danger">Excluir</button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">01/01/2000</th>
-                        <td>Mossoró</td>
-                        <td>Fortaleza</td>
-                        <td>400 kM</td>
-                        <td>R$ 150,00</td>
-                        <td>R$ 150,00</td>
-                        <td >
-                            <div class="flex-row-center btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-primary">Editar</button>
-                                <button type="button" class="btn btn-danger">Excluir</button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">01/01/2000</th>
-                        <td>Mossoró</td>
-                        <td>Fortaleza</td>
-                        <td>400 kM</td>
-                        <td>R$ 150,00</td>
-                        <td>R$ 150,00</td>
-                        <td >
-                            <div class="flex-row-center btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-primary">Editar</button>
-                                <button type="button" class="btn btn-danger">Excluir</button>
-                            </div>
-                        </td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -237,9 +211,19 @@ use Vtiful\Kernel\Format;
 
     // Funcionalidade redirecionamento para editar perfil
     
-    document.querySelector('.profile-infos').addEventListener('click', () => {
-            window.location.href = './editPerfil.php?id=<?php print $usuId ?>';
-        });
+        document.querySelector('.profile-infos').addEventListener('click', () => {
+                window.location.href = './editPerfil.php?id=<?php print $usuId ?>';
+            });
+    
+    // Funcionalidade excluir viagem:
+
+            function remove(viagemId, usuId) {
+                let confirmacao = confirm("Deseja realmente excluir essa viagem?");
+
+                if (confirmacao == true) {
+                    window.location.href = `./excluirViagem.php?viagemid=${viagemId}&usuid=${usuId}`;
+                }
+            }
     
     </script>
 </body>
