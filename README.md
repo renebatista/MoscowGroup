@@ -39,6 +39,7 @@ que a pessoa realiza durante o mês.
 - [Cenários](https://drive.google.com/drive/folders/10C3oQWkXZN6yUs8yTgRbkyG7KOF76A4Q?usp=sharing)
 - [WireFrames](https://drive.google.com/drive/folders/100TG9k_kNmTU9_Gc0jnTsLp0F6tlcKsb?usp=sharing)
 - [Prototipos Hi-Fi (figma) - RegistPage|LoginPage|HomePage](https://www.figma.com/file/F6hROrGHldsj3gt0PxDqVB/Untitled?node-id=25%3A3&mode=dev)
+- [Prototipos Hi-Fi (figma) - ListarViagens|EditProfile|AddViagem](https://www.figma.com/file/Rbr6WZNYkA1thPiCw5mQ12/Untitled?type=design&node-id=2%3A68&mode=dev)
 - [Avaliação Heurística](https://docs.google.com/spreadsheets/d/105X3iM4WGDjqFKXt3BEy1zShjvA8bApb/edit?usp=sharing&ouid=110989982631522551342&rtpof=true&sd=true)
 
 # Tecnologias Usadas
