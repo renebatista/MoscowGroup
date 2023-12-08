@@ -148,7 +148,9 @@ use Vtiful\Kernel\Format;
     <script> 
     // Funcionalidade HomePage Button
 
-        var elements = document.getElementById('logo');
+        var elements = document.getElementById('logo').addEventListener('click', () => {
+            window.location.href = './index.php?id=<?php print $usuId ?>';
+        });
 
     // Funcionalidade das divs de metricas
 
