@@ -69,7 +69,7 @@ use Vtiful\Kernel\Format;
                     <th scope="col">Distância</th>
                     <th scope="col">Gastos</th>
                     <?php
-                        if ($loadUserInfos->fretista == 0) {
+                        if ($loadUserInfos->fretista != 0) {
                             print "<th scope=\"col\">Ganhos</th>";
                         }
                     ?>
@@ -105,7 +105,6 @@ use Vtiful\Kernel\Format;
                                 $gastos += $loadResults->gastos;
                                 $KmMes += $loadResults->distancia;
                                 $ganhos += $loadResults->ganhos;
-                                $contador++;
 
                                 // Convertendo data e hora:
 
@@ -160,9 +159,9 @@ use Vtiful\Kernel\Format;
                         <td><strong>R$ <?php print $gastos ?></strong></td>
                         <?php
                             if ($loadUserInfos->fretista != 0) {
-                                print "<td><strong>R$ <?php print $ganhos ?></strong></td>";
+                                print "<td><strong>R$ $ganhos</strong></td>";
                             }
-                        ?>                        
+                        ?>
                         <td>
                         </td>
                     </tr>

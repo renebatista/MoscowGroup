@@ -16,8 +16,8 @@ if (isset($_POST['editar'])) {
     $checkbox = $_POST["fretista"];
     $fretista = 0;
 
-    if ($UrlPerfil == null) {
-        $urlPerfil = $loadUserInfos->URL_Perfil;
+    if ($UrlPerfil == "") {
+        $UrlPerfil = $loadUserInfos->URL_Perfil;
     }
 
     if ($checkbox == 'sim') {
@@ -27,7 +27,7 @@ if (isset($_POST['editar'])) {
     }
 
     $updateUserInfosSql = "UPDATE Usuarios 
-                           SET Nome='$nome', URL_Perfil='$urlPerfil', fretista=$fretista
+                           SET Nome='$nome', URL_Perfil='$UrlPerfil', fretista=$fretista
                            WHERE id=$usuIdDec";
                         
     try {
