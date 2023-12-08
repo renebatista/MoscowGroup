@@ -1,7 +1,6 @@
 # Let's Go Trip! - Sistema de Gerenciamento de viagens
 
-![LogoLetsGo](https://github.com/renebatista/MoscowGroup/assets/87207601/0ec7b754-1034-4e4b-a1fb-7ffac3d84ee9)
-
+![logo](https://github.com/renebatista/MoscowGroup/assets/87207601/85085776-06d2-460d-9856-9d5bc9e41ff5)
 
 # Sobre o Projeto
 
