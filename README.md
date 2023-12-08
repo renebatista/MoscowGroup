@@ -57,8 +57,8 @@ funcionalidades gerais do sistema e sua meta.
   <tbody>
     <tr> 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DerickCarvalho"><img src="https://avatars.githubusercontent.com/u/87207601?v=4" width="100px;" alt="Derick Carvalho"/><br /><sub>  <b>Derick Carvalho</b></sub></a><br /><b>Documentação/FrondEnd/BackEnd/Design/DBA</b></sub></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/thawankadson"><img src="https://avatars.githubusercontent.com/u/107351264?v=4" width="100px;" alt="Thawan Kadson"/><br /><sub>  <b>Thawan Kadson</b></sub></a><br /><b>Documentação/Design</b></sub></td>  
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/renebatista"><img src="https://avatars.githubusercontent.com/u/71616781?v=4" width="100px;" alt="Renê Batista"/><br /><sub>  <b>Renê Batista</b></sub></a><br /><b>Documentação/BackEnd/DBA</b></sub></td> 
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/thawankadson"><img src="https://avatars.githubusercontent.com/u/107351264?v=4" width="100px;" alt="Thawan Kadson"/><br /><sub>  <b>Thawan Kadson</b></sub></a><br /><b>Documentação/Design/FrontEnd/BackEnd</b></sub></td>  
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/renebatista"><img src="https://avatars.githubusercontent.com/u/71616781?v=4" width="100px;" alt="Renê Batista"/><br /><sub>  <b>Renê Batista</b></sub></a><br /><b>Documentação/BackEnd/FrontEnd/DBA</b></sub></td> 
     </tr>    
   </tbody>
 </table>
