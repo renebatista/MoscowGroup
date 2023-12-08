@@ -33,6 +33,12 @@ que a pessoa realiza durante o mês.
 - [x] **Editar informações básicas do usuário**
 - [x] **Mudar foto de perfil do usuário**
 
+# Prototipos Lo-Fi e Hi-Fi | Personas
+
+- [Personas](https://drive.google.com/drive/folders/1-TiXo93F1PbXMrfXks51RUHLzXdbdTma?usp=sharing)
+- [WireFrames](https://drive.google.com/drive/folders/100TG9k_kNmTU9_Gc0jnTsLp0F6tlcKsb?usp=sharing)
+- [Prototipos Hi-Fi (figma) - RegistPage|LoginPage|HomePage](https://www.figma.com/file/F6hROrGHldsj3gt0PxDqVB/Untitled?node-id=25%3A3&mode=dev)
+
 # Tecnologias Usadas
 
 - [PhP](https://www.php.net)
