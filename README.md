@@ -57,6 +57,12 @@ que a pessoa realiza durante o mês.
 Acesse [MoscowGroup Wiki](https://github.com/renebatista/MoscowGroup/wiki) para saber detalhes sobre o nosso processo de desenvolvimento,
 funcionalidades gerais do sistema e sua meta.
 
+# Acesso ao sistema:
+
+- [Let's Go Trip!](http://168.232.153.232/MoscowGroup/Login.php)
+- Usuário: AcessoProf
+- Senha: senha123
+
 # Autores
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
